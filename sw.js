@@ -1,19 +1,20 @@
 // sw.js — Service Worker para funcionamento offline
-const CACHE_NAME = 'dim-eletrico-v1';
+const CACHE_NAME = 'dim-eletrico-v2';
+const BASE = '/ferramentas';
 
 // Arquivos para cache (offline)
 const URLS_TO_CACHE = [
-  './',
-  './index.html',
-  './style.css',
-  './script.js',
-  './manifest.json',
-  './imagens/icon-192.png',
-  './imagens/icon-512.png',
-  './imagens/metodosinstalacao.png',
-  './completo/index.html',
-  './completo/style.css',
-  './completo/script.js',
+  BASE + '/',
+  BASE + '/index.html',
+  BASE + '/style.css',
+  BASE + '/script.js',
+  BASE + '/manifest.json',
+  BASE + '/imagens/icon-192.png',
+  BASE + '/imagens/icon-512.png',
+  BASE + '/imagens/metodosinstalacao.png',
+  BASE + '/completo/index.html',
+  BASE + '/completo/style.css',
+  BASE + '/completo/script.js',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 ];
 
@@ -46,7 +47,7 @@ self.addEventListener('fetch', event => {
       return cached || fetch(event.request).catch(() => {
         // Se offline e não tem cache, retorna a index
         if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
+          return caches.match(BASE + '/index.html');
         }
       });
     })
