@@ -1,0 +1,10 @@
+# Google Drive and OS specific files
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Programming temporary files
+.vscode/
+
+# Project files
+# (Not excluding anything else for now as this is a simple project)

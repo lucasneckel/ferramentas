@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimensionamento de Bomba Submersa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <!-- Botão do Menu -->
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Sidebar do Menu -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button id="menu-close" class="btn-close-menu" aria-label="Fechar Menu">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../index.html" class="nav-link">Versão Simplificada</a>
+            <a href="../completo/index.html" class="nav-link">Versão Completa</a>
+            <a href="./index.html" class="nav-link active">Cálculo de MCA</a>
+        </nav>
+    </aside>
+
+    <div class="container">
+        <header>
+            <div class="logo-icon">💧</div>
+            <h1>HydroCalc Pro</h1>
+            <p>Dimensionamento inteligente para bombas d'água submersas tipo caneta</p>
+        </header>
+
+        <main class="glass-card">
+            <form id="calc-form">
+                <div class="image-container">
+                    <img src="imagem.png" alt="Esquema do Sistema de Bombeamento" class="hero-image">
+                </div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <input type="number" id="vazao" step="0.1" required placeholder=" ">
+                        <label for="vazao">Vazão Desejada (m³/h)</label>
+                        <span class="tooltip" title="A quantidade de água necessária por hora. Essencial para o cálculo de potência e diâmetro.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="nivelDinamico" step="0.1" required placeholder=" ">
+                        <label for="nivelDinamico">Nível Dinâmico do Poço (m)</label>
+                        <span class="tooltip" title="A profundidade da água no poço enquanto a bomba está ligada.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="desnivelVertical" step="0.1" required placeholder=" ">
+                        <label for="desnivelVertical">Desnível Vertical (m)</label>
+                        <span class="tooltip" title="A diferença de altura entre a boca do poço e o nível de entrada do reservatório.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="distanciaHorizontal" step="0.1" required placeholder=" ">
+                        <label for="distanciaHorizontal">Distância Horizontal (m)</label>
+                        <span class="tooltip" title="O comprimento do percurso em linha reta pelo solo, do poço ao reservatório.">ℹ️</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>Calcular Sistema</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="btn-icon">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div id="results" class="results-container hidden">
+                <h2>Resultados do Dimensionamento</h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="icon-wrapper bg-blue">💦</div>
+                        <div class="result-info">
+                            <span class="result-label">Altura Manométrica Total</span>
+                            <span class="result-value" id="res-mca">-</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="icon-wrapper bg-purple">⚡</div>
+                        <div class="result-info">
+                            <span class="result-label">Potência Recomendada</span>
+                            <span class="result-value" id="res-potencia">-</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="icon-wrapper bg-teal">⭕</div>
+                        <div class="result-info">
+                            <span class="result-label">Tubulação (Edutora/Adutora)</span>
+                            <span class="result-value" id="res-diametro">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="details-text">
+                    <p><strong>Comprimento Total da Tubulação:</strong> <span id="res-comprimento">-</span> metros.</p>
+                    <p><strong>Nota:</strong> Este cálculo considera uma perda de carga estimada de 5% sobre a extensão total da tubulação e eficiência típica de motores submersos (50%). Para projetos complexos, consulte um engenheiro especialista.</p>
+                </div>
+
+                <button id="download-txt" class="btn-secondary hidden">
+                    <span>Baixar Memorial (.txt)</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const menuClose = document.getElementById('menu-close');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            function openMenu() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+            }
+
+            function closeMenu() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+
+            if(menuToggle) menuToggle.addEventListener('click', openMenu);
+            if(menuClose) menuClose.addEventListener('click', closeMenu);
+            if(overlay) overlay.addEventListener('click', closeMenu);
+        });
+    </script>
+</body>
+</html>

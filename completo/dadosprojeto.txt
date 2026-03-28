@@ -1,0 +1,26 @@
+Faça um site estilo moderno em html, css e javascript, com dimensionamento de condutores de circuitos, onde sejam informados os dados:
+- Campo texto, Número do Circuito;
+- Campo texto, Nome do Circuito;
+- Tipo de Circuito: Força ou Iluminção, em uma lista de seleção única;
+- Campo texto, Potência, podendo ser fornecida em W, kW, CV ou HP, onde a unidade possa ser escolhida através de uma lista de seleção única;
+- Campo texto, Fator de potência, tendo como valor padrão 0,91;
+- Campo texto, Comprimento do cabo em metros;
+- Circuitos agrupados, combo box com valores: 1, 2, 3, 4, 5, 6, 7, 8, 9 a 11, 12 a 15, 16 a 19 e >= 20;
+- Núm. Condutores carregados, em uma lista de seleção única, com opção 2 e 3;
+- Método de instalação, lista de selação única, conforme métodos de referencia de instalação da NBR 5410;
+- Forma de agrupamento, combo box, conforme opções da tabela 42 da NBR 5410
+- Local de instalação, lista de seleção única com valores 2 e 3
+- Tipo de Isolação, lista de seleção única com valores PVC(750V) e EPR/XLPE(1kV)
+- Material do condutor, lista de seleção única com opções cobre ou alumínio
+- Fases da carga, lista de seleção única com opções Monofásico, Bifásico ou Trifásico
+- Tensão lista de seleção única com opções 127/220V ou 220/380V
+- Temperatura ambiente, com combobox com opções de 10 a 80°C, mostrada com intervalo de 5°C;
+- Máxima queda de tensão, em lista de opções única com valores de 2% e 4%;
+- Campo texto, Valor de duração do curto circuito, com valor padrão de 10ms;
+- Campo texto, Corrente de curto circuito presumida em kA;
+- Campo texto, só visualização, mostrando a Potência Aparente, calculada com dados da potência e do fator de potencia, em VA
+- Campo texto, só visualização, mostrando o FC Temperatura, com base na NBR5410 em função da temperatura ambiente;
+- Campo texto, só visualização, mostrando o FC Número Circuito, obtida na tabela 42 da NBR 5410;
+- Apresentar em um campo texto o calculo da corrente de projeto com os dados obtidos
+- Apresentar em um campo a corrente ajustada considerando o FC Temperatura(Fator de Correção em função da Temperatura) e o FC Número Circ(Fator de Correção em Função do Agrupamento)
+- Colocar um botão para realizar o cálculo da seção do condutor, considerando as informações apresentadas anteriormente e pelos métodos: seção mínima, condução de corrente, queda de tensão e curto-circuito. Apresentar o resultado de cada método informando a Seção Calculada, Capacidade de condução de corrente do cabo, Queda de Tensão em %, e se está ajustada ao nível de curto circuito.
