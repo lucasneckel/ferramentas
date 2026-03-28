@@ -64,22 +64,68 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (vazao <= 30.0) diametroH = '3" (85mm)';
         else diametroH = '4" ou superior (>100mm)';
 
-        // 3. Cálculo da Potência da Bomba (CV)
+        // 3. Cálculo da Potência de Projeto (CV)
         // Fórmula aproximada: P(cv) = (Q(m³/h) * MCA) / (270 * Rendimento)
         const potenciaCalculada = (vazao * mca) / (270 * rendimento);
 
-        // Arredondar para potência comercial superior
-        const potenciasComerciais = [0.33, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.5, 10.0, 12.5, 15.0, 20.0, 25.0, 30.0];
-        let potenciaRecomendada = potenciasComerciais[potenciasComerciais.length - 1]; // Fallback para a maior
+        // 4. Motor de Busca: Sugestão Automática de Bomba Leão
+        let bombaRecomendada = null;
+        if (baseBombas.length > 0) {
+            let menorDiferencaH = Infinity;
+            for (const bomba of baseBombas) {
+                const curva = bomba.curva;
+                if (!curva || curva.length === 0) continue;
 
-        for (let i = 0; i < potenciasComerciais.length; i++) {
-            if (potenciaCalculada <= potenciasComerciais[i]) {
-                potenciaRecomendada = potenciasComerciais[i];
-                break;
+                if (vazao < curva[0].q || vazao > curva[curva.length - 1].q) continue; // Fora do escopo de vazão da bomba
+
+                let h_estimado = null;
+                for (let i = 0; i < curva.length - 1; i++) {
+                    const p1 = curva[i];
+                    const p2 = curva[i + 1];
+                    if (p1.q <= vazao && vazao <= p2.q) {
+                        if (p1.q === p2.q) { h_estimado = p1.h; } 
+                        else { h_estimado = p1.h + ((p2.h - p1.h) * ((vazao - p1.q) / (p2.q - p1.q))); }
+                        break;
+                    }
+                }
+                
+                if (h_estimado === null && vazao === curva[curva.length - 1].q) {
+                    h_estimado = curva[curva.length - 1].h;
+                }
+
+                if (h_estimado !== null && h_estimado >= mca) {
+                    const diffH = h_estimado - mca;
+                    if (!bombaRecomendada || 
+                        bomba.potencia_cv < bombaRecomendada.potencia_cv || 
+                        (bomba.potencia_cv === bombaRecomendada.potencia_cv && diffH < menorDiferencaH)) {
+                        bombaRecomendada = {
+                            ...bomba,
+                            h_ponto: h_estimado,
+                            q_ponto: vazao
+                        };
+                        menorDiferencaH = diffH;
+                    }
+                }
             }
         }
 
-        // 4. Cálculo de Cabo Elétrico (Aproximação)
+        // 5. Definir Potência Recomendada (Prioridade para a bomba encontrada)
+        let potenciaRecomendada;
+        if (bombaRecomendada) {
+            potenciaRecomendada = bombaRecomendada.potencia_cv;
+        } else {
+            // Arredondar para potência comercial superior genérica (fallback)
+            const potenciasComerciais = [0.33, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 7.5, 10.0, 12.5, 15.0, 20.0, 25.0, 30.0];
+            potenciaRecomendada = potenciasComerciais[potenciasComerciais.length - 1]; 
+
+            for (let i = 0; i < potenciasComerciais.length; i++) {
+                if (potenciaCalculada <= potenciasComerciais[i]) {
+                    potenciaRecomendada = potenciasComerciais[i];
+                    break;
+                }
+            }
+        }
+
         const comprimentoBombaPainel = profundidadeInstalacao + 10;
         const potenciaWatts = potenciaRecomendada * 735.5;
         const fpEstimado = 0.8;
@@ -126,46 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
             lblTensao = '380V Tri:';
         }
 
-        // 5. Motor de Busca: Sugestão Automática de Bomba Leão
-        let bombaRecomendada = null;
-        if (baseBombas.length > 0) {
-            let menorDiferencaH = Infinity;
-            for (const bomba of baseBombas) {
-                const curva = bomba.curva;
-                if (!curva || curva.length === 0) continue;
-
-                if (vazao < curva[0].q || vazao > curva[curva.length - 1].q) continue; // Fora do escopo de vazão da bomba
-
-                let h_estimado = null;
-                for (let i = 0; i < curva.length - 1; i++) {
-                    const p1 = curva[i];
-                    const p2 = curva[i + 1];
-                    if (p1.q <= vazao && vazao <= p2.q) {
-                        if (p1.q === p2.q) { h_estimado = p1.h; } 
-                        else { h_estimado = p1.h + ((p2.h - p1.h) * ((vazao - p1.q) / (p2.q - p1.q))); }
-                        break;
-                    }
-                }
-                
-                if (h_estimado === null && vazao === curva[curva.length - 1].q) {
-                    h_estimado = curva[curva.length - 1].h;
-                }
-
-                if (h_estimado !== null && h_estimado >= mca) {
-                    const diffH = h_estimado - mca;
-                    if (!bombaRecomendada || 
-                        bomba.potencia_cv < bombaRecomendada.potencia_cv || 
-                        (bomba.potencia_cv === bombaRecomendada.potencia_cv && diffH < menorDiferencaH)) {
-                        bombaRecomendada = {
-                            ...bomba,
-                            h_ponto: h_estimado,
-                            q_ponto: vazao
-                        };
-                        menorDiferencaH = diffH;
-                    }
-                }
-            }
-        }
 
         // Armazenar resultados para o memorial
         currentResults = {

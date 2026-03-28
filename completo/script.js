@@ -53,6 +53,13 @@ const fatorK = {
     "aluminio": { "PVC": 76, "EPR": 94 }
 };
 
+// Tabela de Impedância Típica de Transformadores (NBR 5440)
+const trafoImpedanciaTable = {
+    "30": 3.5, "45": 3.5, "75": 3.5,
+    "112.5": 4.5, "150": 4.5, "225": 4.5, "300": 4.5, "500": 4.5,
+    "750": 5.5, "1000": 5.5, "1500": 5.5, "2000": 5.5, "2500": 5.5
+};
+
 // Resistividade do Cobre e Alumínio (ohms.mm²/m) - quente aprox. (Considerando temp trab)
 const resistividade = {
     "cobre": 0.0225,
@@ -174,10 +181,24 @@ const elements = {
     resDemandaTotal: document.getElementById('res-demanda-total'),
     detalhesDemandaClasses: document.getElementById('detalhes-demanda-classes'),
 
-    // Modal
+    // Modal Métodos
     btnInfoMetodo: document.getElementById('btn-info-metodo'),
     modalMetodos: document.getElementById('modal-metodos'),
-    btnCloseModal: document.getElementById('btn-close-modal')
+    btnCloseModal: document.getElementById('btn-close-modal'),
+
+    // Modal ICC
+    btnCalcIcc: document.getElementById('btn-calc-icc'),
+    modalIcc: document.getElementById('modal-icc'),
+    btnCloseIcc: document.getElementById('btn-close-icc'),
+    btnIccOk: document.getElementById('btn-icc-ok'),
+    btnIccCancel: document.getElementById('btn-icc-cancel'),
+    
+    trafoPotencia: document.getElementById('trafo-potencia'),
+    trafoTensaoMt: document.getElementById('trafo-tensao-mt'),
+    trafoTensaoBt: document.getElementById('trafo-tensao-bt'),
+    trafoImpedancia: document.getElementById('trafo-impedancia'),
+    resIccMt: document.getElementById('res-icc-mt'),
+    resIccBt: document.getElementById('res-icc-bt')
 };
 
 // 3. Funções de Cálculo Intermediário
@@ -326,7 +347,8 @@ function calcularSecao() {
 
     // Exibição Final
     let nomeMaterial = mat === "aluminio" ? "Alumínio" : "Cobre";
-    elements.resAdotada.innerHTML = adotada + " mm² <span>(Material: " + nomeMaterial + ")</span>";
+    let nomeIsolacao = iso === "EPR" ? "EPR/XLPE (90°C)" : "PVC (70°C)";
+    elements.resAdotada.innerHTML = adotada + " mm² <span>(Material: " + nomeMaterial + ", Isolação: " + nomeIsolacao + "<br>Fator k: " + kVal + ")</span>";
     elements.resDetalhes.textContent = `Iz Cabo: ${maxIz} A | Queda Tensão: ${quedaRealPerc.toFixed(2)} % | Ib': ${ibAjust.toFixed(2)} A`;
 
     // Mostrar container
@@ -779,6 +801,61 @@ window.addEventListener('click', (event) => {
     if (event.target == elements.modalMetodos) {
         fecharModal();
     }
+    if (event.target == elements.modalIcc) {
+        fecharModalIcc();
+    }
+});
+
+// Lógica Modal ICC
+function calcularIccModal() {
+    const s = parseFloat(elements.trafoPotencia.value);
+    const vMt = parseFloat(elements.trafoTensaoMt.value); // em kV
+    const vBt = parseFloat(elements.trafoTensaoBt.value) / 1000; // converter V para kV
+    const zPerc = parseFloat(elements.trafoImpedancia.value);
+
+    if (isNaN(s) || isNaN(zPerc) || zPerc <= 0) return;
+
+    // Formula: Icc = S / (sqrt(3) * V * (Z%/100))
+    const iccBt = s / (Math.sqrt(3) * vBt * (zPerc / 100));
+    const iccMt = s / (Math.sqrt(3) * vMt * (zPerc / 100));
+
+    elements.resIccBt.textContent = (iccBt / 1000).toFixed(2) + " kA";
+    elements.resIccMt.textContent = (iccMt / 1000).toFixed(2) + " kA";
+}
+
+function abrirModalIcc() {
+    elements.modalIcc.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    calcularIccModal();
+}
+
+function fecharModalIcc() {
+    elements.modalIcc.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+elements.btnCalcIcc.addEventListener('click', abrirModalIcc);
+elements.btnCloseIcc.addEventListener('click', fecharModalIcc);
+elements.btnIccCancel.addEventListener('click', fecharModalIcc);
+
+elements.trafoPotencia.addEventListener('change', () => {
+    const pot = elements.trafoPotencia.value;
+    elements.trafoImpedancia.value = trafoImpedanciaTable[pot] || 4.5;
+    calcularIccModal();
+});
+
+[elements.trafoTensaoMt, elements.trafoTensaoBt, elements.trafoImpedancia].forEach(el => {
+    el.addEventListener('input', calcularIccModal);
+});
+
+elements.btnIccOk.addEventListener('click', () => {
+    const valKkA = parseFloat(elements.resIccBt.textContent);
+    if (!isNaN(valKkA)) {
+        elements.icc.value = valKkA.toFixed(1);
+        // Disparar evento para atualizar cálculos se necessário
+        elements.icc.dispatchEvent(new Event('input'));
+    }
+    fecharModalIcc();
 });
 
 // Mostrar/Esconder campos de curto-circuito

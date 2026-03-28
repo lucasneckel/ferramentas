@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,12 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Botão do Menu -->
     <button id="menu-toggle" class="menu-toggle" aria-label="Abrir Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
     </button>
@@ -31,7 +34,8 @@
     <div class="container">
         <header>
             <div class="header-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="url(#energyGrad)" stroke="none" filter="drop-shadow(0px 4px 6px rgba(250, 204, 21, 0.5))">
+                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24"
+                    fill="url(#energyGrad)" stroke="none" filter="drop-shadow(0px 4px 6px rgba(250, 204, 21, 0.5))">
                     <defs>
                         <linearGradient id="energyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#fef08a;stop-opacity:1" />
@@ -51,7 +55,8 @@
                 <h2>Dados do Projeto</h2>
                 <div class="project-actions">
                     <button type="button" id="btn-novo-projeto" class="btn-icon" title="Novo Projeto">📄 Novo</button>
-                    <button type="button" id="btn-salvar-projeto" class="btn-icon" title="Salvar Projeto">💾 Salvar</button>
+                    <button type="button" id="btn-salvar-projeto" class="btn-icon" title="Salvar Projeto">💾
+                        Salvar</button>
                     <label class="btn-icon" title="Abrir Projeto" style="cursor: pointer;">
                         📂 Abrir
                         <input type="file" id="input-abrir-projeto" accept=".json" style="display: none;">
@@ -65,7 +70,7 @@
                 </div>
             </div>
         </section>
-        
+
         <main>
             <form id="calculator-form">
                 <!-- Seção: Identificação -->
@@ -91,9 +96,12 @@
                             <label for="classe-demanda">Classe de Demanda</label>
                             <select id="classe-demanda">
                                 <option value="a">a) Demanda referente a iluminação e tomadas</option>
-                                <option value="b">b) Demanda referentes a chuveiros, torneiras, aquecedores de água de passagem e ferros elétricos</option>
-                                <option value="c">c) Demanda referente a aquecedor central ou de acumulação (boiler)</option>
-                                <option value="d">d) Demanda de secadora de roupa, forno elétrico, máquina de lavar louça e forno de micro-ondas</option>
+                                <option value="b">b) Demanda referentes a chuveiros, torneiras, aquecedores de água de
+                                    passagem e ferros elétricos</option>
+                                <option value="c">c) Demanda referente a aquecedor central ou de acumulação (boiler)
+                                </option>
+                                <option value="d">d) Demanda de secadora de roupa, forno elétrico, máquina de lavar
+                                    louça e forno de micro-ondas</option>
                                 <option value="e">e) Demanda referente a fogões elétricos</option>
                                 <option value="f">f) Demanda referente a condicionador de ar tipo janela</option>
                                 <option value="g">g) Demanda referente a motores e máquinas de solda a motor</option>
@@ -153,7 +161,8 @@
                         <div class="form-group">
                             <div class="label-with-button">
                                 <label for="metodo-instalacao">Método de Instalação (NBR 5410)</label>
-                                <button type="button" id="btn-info-metodo" class="btn-info" title="Ver Métodos de Instalação">ℹ️</button>
+                                <button type="button" id="btn-info-metodo" class="btn-info"
+                                    title="Ver Métodos de Instalação">ℹ️</button>
                             </div>
                             <select id="metodo-instalacao">
                                 <option value="A1">A1</option>
@@ -214,7 +223,7 @@
                                 <option value="3">3 (Condições rigorosas)</option>
                             </select>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label for="isolacao">Tipo de Isolação</label>
                             <select id="isolacao">
                                 <option value="PVC">PVC (750V)</option>
@@ -267,8 +276,12 @@
                             <input type="number" id="duracao-cc" value="10">
                         </div>
                         <div class="form-group" id="group-icc">
-                            <label for="icc">Corrente Curto Presumida (kA)</label>
-                            <input type="number" id="icc" value="3.0" step="0.1">
+                            <div class="label-with-button">
+                                <label for="icc">Corrente Curto Presumida (kA)</label>
+                                <button type="button" id="btn-calc-icc" class="btn-info"
+                                    title="Calcular Icc do Transformador">⚡</button>
+                            </div>
+                            <input type="number" id="icc" value="3.3" step="0.1">
                         </div>
                     </div>
                 </section>
@@ -369,15 +382,19 @@
                     </table>
                 </div>
                 <div id="quadro-vazio" class="empty-state">
-                    Nenhum circuito adicionado ao quadro ainda. Calcule um circuito acima e clique em "Adicionar ao Quadro".
+                    Nenhum circuito adicionado ao quadro ainda. Calcule um circuito acima e clique em "Adicionar ao
+                    Quadro".
                 </div>
                 <div class="actions" style="margin-top: 1.5rem; flex-wrap: wrap;">
-                     <button type="button" id="btn-exportar-quadro" class="btn-primary" style="display:none;">⬇ Exportar Quadro (CSV)</button>
-                     <button type="button" id="id-btn-calcular-demanda" class="btn-success" style="display:none; background-color: #6366f1;">🧮 Calcular Demanda do Quadro</button>
+                    <button type="button" id="btn-exportar-quadro" class="btn-primary" style="display:none;">⬇ Exportar
+                        Quadro (CSV)</button>
+                    <button type="button" id="id-btn-calcular-demanda" class="btn-success"
+                        style="display:none; background-color: #6366f1;">🧮 Calcular Demanda do Quadro</button>
                 </div>
 
                 <!-- Resultados da Demanda do Quadro -->
-                <div id="container-resultados-demanda" class="card result-card hidden" style="margin-top: 2rem; border: 2px solid #6366f1;">
+                <div id="container-resultados-demanda" class="card result-card hidden"
+                    style="margin-top: 2rem; border: 2px solid #6366f1;">
                     <h3>Resumo de Demanda do Quadro (GED-13)</h3>
                     <div class="result-grid">
                         <div class="result-box">
@@ -398,8 +415,75 @@
 
         <footer class="site-footer">
             <p>Elaborado pela equipe de engenharia do Município de Três Passos/RS.</p>
-            <p>Dúvidas, sugestões ou problemas, entrar em contato através do e-mail: <a href="mailto:obras@trespassos.rs.gov.br">obras@trespassos.rs.gov.br</a>.</p>
+            <p>Dúvidas, sugestões ou problemas, entrar em contato através do e-mail: <a
+                    href="mailto:obras@trespassos.rs.gov.br">obras@trespassos.rs.gov.br</a>.</p>
         </footer>
+    </div>
+
+    <!-- Modal para cálculo de Icc do Transformador -->
+    <div id="modal-icc" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Cálculo de Corrente de Curto-Circuito</h2>
+                <span class="btn-close" id="btn-close-icc">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="trafo-potencia">Potência do Transformador (kVA)</label>
+                        <select id="trafo-potencia">
+                            <option value="30">30 kVA</option>
+                            <option value="45">45 kVA</option>
+                            <option value="75" selected>75 kVA</option>
+                            <option value="112.5">112,5 kVA</option>
+                            <option value="150">150 kVA</option>
+                            <option value="225">225 kVA</option>
+                            <option value="300">300 kVA</option>
+                            <option value="500">500 kVA</option>
+                            <option value="750">750 kVA</option>
+                            <option value="1000">1000 kVA</option>
+                            <option value="1500">1500 kVA</option>
+                            <option value="2000">2000 kVA</option>
+                            <option value="2500">2500 kVA</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trafo-tensao-mt">Tensão de Média (MT)</label>
+                        <select id="trafo-tensao-mt">
+                            <option value="13.8">13,8 kV</option>
+                            <option value="21.3" selected>21,3 kV</option>
+                            <option value="23.1">23,1 kV</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trafo-tensao-bt">Tensão de Baixa (BT)</label>
+                        <select id="trafo-tensao-bt">
+                            <option value="220">127/220V</option>
+                            <option value="380" selected>220/380V</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trafo-impedancia">Impedância (%Z)</label>
+                        <input type="number" id="trafo-impedancia" value="3.5" step="0.1">
+                    </div>
+                </div>
+
+                <div class="icc-results">
+                    <div class="icc-result-box">
+                        <span class="icc-label">Icc Presumida MT (Primário)</span>
+                        <span class="icc-value" id="res-icc-mt">-- kA</span>
+                    </div>
+                    <div class="icc-result-box highlight">
+                        <span class="icc-label">Icc Presumida BT (Secundário)</span>
+                        <span class="icc-value" id="res-icc-bt">-- kA</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-icc-ok" class="btn-primary">OK (Usar valor BT)</button>
+                <button type="button" id="btn-icc-cancel" class="btn-secondary">Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal para imagem de Métodos de Instalação -->
@@ -407,7 +491,7 @@
         <div class="modal-content">
             <span class="btn-close" id="btn-close-modal">&times;</span>
             <div class="modal-img-container">
-                <img src="imagens/metodosinstalacao.png" alt="Guia de Métodos de Instalação NBR 5410">
+                <img src="../imagens/metodosinstalacao.png" alt="Guia de Métodos de Instalação NBR 5410">
             </div>
         </div>
     </div>
@@ -430,10 +514,11 @@
                 overlay.classList.remove('active');
             }
 
-            if(menuToggle) menuToggle.addEventListener('click', openMenu);
-            if(menuClose) menuClose.addEventListener('click', closeMenu);
-            if(overlay) overlay.addEventListener('click', closeMenu);
+            if (menuToggle) menuToggle.addEventListener('click', openMenu);
+            if (menuClose) menuClose.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
         });
     </script>
 </body>
+
 </html>
