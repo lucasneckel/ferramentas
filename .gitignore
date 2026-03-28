@@ -8,3 +8,9 @@ Thumbs.db
 
 # Project files
 # (Not excluding anything else for now as this is a simple project)
+
+# Binary and generated files
+*.zip
+*.pdf
+*.rar
+*.zip

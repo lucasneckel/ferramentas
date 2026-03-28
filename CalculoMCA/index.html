@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="background-animation"></div>
 
     <!-- Botão do Menu -->
     <button id="menu-toggle" class="menu-toggle" aria-label="Abrir Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
     </button>
@@ -49,39 +52,79 @@
                     <div class="input-field">
                         <input type="number" id="vazao" step="0.1" required placeholder=" ">
                         <label for="vazao">Vazão Desejada (m³/h)</label>
-                        <span class="tooltip" title="A quantidade de água necessária por hora. Essencial para o cálculo de potência e diâmetro.">ℹ️</span>
+                        <span class="tooltip"
+                            title="A quantidade de água necessária por hora. Essencial para o cálculo de potência e diâmetro.">ℹ️</span>
                     </div>
 
                     <div class="input-field">
                         <input type="number" id="nivelDinamico" step="0.1" required placeholder=" ">
                         <label for="nivelDinamico">Nível Dinâmico do Poço (m)</label>
-                        <span class="tooltip" title="A profundidade da água no poço enquanto a bomba está ligada.">ℹ️</span>
+                        <span class="tooltip"
+                            title="A profundidade da água no poço enquanto a bomba está ligada.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="profundidadeInstalacao" step="0.1" required placeholder=" ">
+                        <label for="profundidadeInstalacao">Profundidade de Instalação (m)</label>
+                        <span class="tooltip"
+                            title="A profundidade real onde a bomba está posicionada. Usado para o comprimento total da tubulação.">ℹ️</span>
                     </div>
 
                     <div class="input-field">
                         <input type="number" id="desnivelVertical" step="0.1" required placeholder=" ">
                         <label for="desnivelVertical">Desnível Vertical (m)</label>
-                        <span class="tooltip" title="A diferença de altura entre a boca do poço e o nível de entrada do reservatório.">ℹ️</span>
+                        <span class="tooltip"
+                            title="A diferença de altura entre a boca do poço e o nível de entrada do reservatório.">ℹ️</span>
                     </div>
 
                     <div class="input-field">
                         <input type="number" id="distanciaHorizontal" step="0.1" required placeholder=" ">
                         <label for="distanciaHorizontal">Distância Horizontal (m)</label>
-                        <span class="tooltip" title="O comprimento do percurso em linha reta pelo solo, do poço ao reservatório.">ℹ️</span>
+                        <span class="tooltip"
+                            title="O comprimento do percurso em linha reta pelo solo, do poço ao reservatório.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="perdaCarga" step="1" min="1" max="30" value="5" required
+                            placeholder=" ">
+                        <label for="perdaCarga">Perda de Carga Estimada (%)</label>
+                        <span class="tooltip"
+                            title="Padrão de 5% para instalações simples e trechos curtos. Aumente este valor para tubulações muito longas ou com muitas conexões.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="rendimento" step="0.01" min="0.4" max="0.8" value="0.5" required
+                            placeholder=" ">
+                        <label for="rendimento">Rendimento do Sistema (0.4 - 0.8)</label>
+                        <span class="tooltip"
+                            title="Eficiência do conjunto motor-bomba. Use 0,5 para estimativas padrão.">ℹ️</span>
+                    </div>
+
+                    <div class="input-field">
+                        <select id="tensaoRede" required>
+                            <option value="" disabled selected></option>
+                            <option value="220_mono">220V Monofásico</option>
+                            <option value="220_tri">220V Trifásico</option>
+                            <option value="380_tri">380V Trifásico</option>
+                        </select>
+                        <label for="tensaoRede">Tensão da Rede Elétrica</label>
+                        <span class="tooltip"
+                            title="A voltagem disponível para o painel de comando. Afeta a bitola do cabo da bomba.">ℹ️</span>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-primary">
                     <span>Calcular Sistema</span>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="btn-icon">
-                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
             </form>
 
             <div id="results" class="results-container hidden">
                 <h2>Resultados do Dimensionamento</h2>
-                
+
                 <div class="results-grid">
                     <div class="result-card">
                         <div class="icon-wrapper bg-blue">💦</div>
@@ -106,25 +149,66 @@
                             <span class="result-value" id="res-diametro">-</span>
                         </div>
                     </div>
+
+                    <div class="result-card">
+                        <div class="icon-wrapper bg-yellow">🔌</div>
+                        <div class="result-info">
+                            <span class="result-label">Cabo Sugerido (Bomba ao Painel ≈ <span
+                                    id="res-dist-cabo">0</span>m)</span>
+                            <div class="cabos-list">
+                                <div class="cabo-item"><span class="cabo-tensao" id="res-tensao-lbl">-</span> <span
+                                        class="cabo-bitola" id="res-cabo-bitola">-</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card hidden" id="card-bomba-leao">
+                        <div class="icon-wrapper" style="background: rgba(234, 179, 8, 0.2); color: #facc15;">⭐</div>
+                        <div class="result-info">
+                            <span class="result-label">Bomba Calculada (Ref. Leão)</span>
+                            <span class="result-value" id="res-bomba-modelo" style="font-size: 1.25rem;">-</span>
+                            <span class="cabo-tensao" id="res-bomba-potencia">-</span>
+                        </div>
+                    </div>
                 </div>
-                
+
                 <div class="details-text">
                     <p><strong>Comprimento Total da Tubulação:</strong> <span id="res-comprimento">-</span> metros.</p>
-                    <p><strong>Nota:</strong> Este cálculo considera uma perda de carga estimada de 5% sobre a extensão total da tubulação e eficiência típica de motores submersos (50%). Para projetos complexos, consulte um engenheiro especialista.</p>
+                    <p><strong>Nota:</strong> Este cálculo considera uma perda de carga estimada de <span
+                            id="res-nota-perda">5</span>% sobre a extensão total da tubulação e eficiência de <span
+                            id="res-nota-rendimento">50</span>%. Para projetos complexos, consulte um engenheiro
+                        especialista.</p>
                 </div>
 
-                <button id="download-txt" class="btn-secondary hidden">
-                    <span>Baixar Memorial (.txt)</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </button>
+                <div class="results-footer">
+                    <a href="leao_tabela_selecao_07-2019_web.pdf" target="_blank" class="btn-secondary">
+                        <span>📖 Tab. Seleção (Leão)</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
+                    <button id="download-txt" class="btn-secondary hidden">
+                        <span>Baixar Memorial (.txt)</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </main>
+        <footer class="main-footer">
+            <p>Elaborado pela equipe de engenharia do Município de Três Passos/RS.</p>
+            <p>Dúvidas, sugestões ou problemas, entrar em contato através do e-mail: <a href="mailto:obras@trespassos.rs.gov.br">obras@trespassos.rs.gov.br</a>.</p>
+        </footer>
     </div>
 
+    <script src="bombas_leao.js"></script>
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -143,10 +227,11 @@
                 overlay.classList.remove('active');
             }
 
-            if(menuToggle) menuToggle.addEventListener('click', openMenu);
-            if(menuClose) menuClose.addEventListener('click', closeMenu);
-            if(overlay) overlay.addEventListener('click', closeMenu);
+            if (menuToggle) menuToggle.addEventListener('click', openMenu);
+            if (menuClose) menuClose.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
         });
     </script>
 </body>
+
 </html>

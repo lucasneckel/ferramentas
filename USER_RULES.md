@@ -1,0 +1,3 @@
+# User Rules
+
+- Sempre responder em português brasileiro (pt-BR).
